@@ -293,4 +293,3 @@ SCP = windowsdan shell ekranı ile linuxa dosya transferi protokolü
 `scp C:\Users\Ali Asker\Desktop\ubuntu-22.04.3-live-server-amd64.iso ali@192.168.17.177/linuxta_istenilen_yer` 
  windowstaki bir dosyayı scp ile linuxa gönderir.
 
- deneme1
