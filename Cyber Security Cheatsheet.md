@@ -1,6 +1,6 @@
 # NETWORK
 =======================================================
-**Network nedir ? :** Bir bağlam yardımıyla (kablo, wireless) cihazların birbiriyle iletişim kurmasını sağlayan ortam. TemelleriAmerikan Savunma Bakanlığı Hava Kuvvetleri tarafından geliştirilen ARPANET ile atılmıştır. Fiziksel ve yazılımsal olmak üzere 2 boyuttan oluşur.
+**Network nedir ? :** Bir bağlam yardımıyla (kablo, wireless) cihazların birbiriyle iletişim kurmasını sağlayan ortam. TemelleriAmerikan Savunma Bakanlığı Hava Kuvvetleri tarafından geliştirilen ARPANET ile atılmıştır. Fiziksel ve yazılımsal olmak üzere 2 boyuttan oluşur.  şŞŞŞ
 - **Fiziksel Network:** Network topolojisi, kablolar, switchler kısacası network cihazları.
 - **Yazılımsal Network:** Protokoller.
 
