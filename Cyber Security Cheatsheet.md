@@ -1,6 +1,6 @@
 # NETWORK
 =======================================================
-**Network nedir ? :** Bir bağlam yardımıyla (kablo, wireless) cihazların birbiriyle iletişim kurmasını sağlayan ortam. TemelleriAmerikan Savunma Bakanlığı Hava Kuvvetleri tarafından geliştirilen ARPANET ile atılmıştır. Fiziksel ve yazılımsal olmak üzere 2 boyuttan oluşur.
+**Network nedir ? :** Bir bağlam yardımıyla (kablo, wireless) cihazların birbiriyle iletişim kurmasını sağlayan ortam. TemelleriAmerikan Savunma Bakanlığı Hava Kuvvetleri tarafından geliştirilen ARPANET ile atılmıştır. Fiziksel ve yazılımsal olmak üzere 2 boyuttan oluşur. 
 - **Fiziksel Network:** Network topolojisi, kablolar, switchler kısacası network cihazları.
 - **Yazılımsal Network:** Protokoller.
 
@@ -287,4 +287,9 @@ lvextend: logical volume'ları genişletme
 	- lvextend -l +100%FREE /dev/mapper/volumegroup10-lvm10
 - Dosya sistemi genişletilir.
 	- resize2fs /dev/mapper/volumegroup10-lvm10
+
+
+SCP = windowsdan shell ekranı ile linuxa dosya transferi protokolü
+`scp C:\Users\Ali Asker\Desktop\ubuntu-22.04.3-live-server-amd64.iso ali@192.168.17.177/linuxta_istenilen_yer` 
+ windowstaki bir dosyayı scp ile linuxa gönderir.
 
