@@ -104,11 +104,11 @@ Bir Networkte Bulunan Host Sayısı:
 - **4. Transport - İletim** : Veri paketlerinin kaynak ve hedef arasında güvenilir bir şekilde iletilmesini sağlar.
    	- Paketlere port numarası ve sıra numarasınin eklenmesi.
 - **3. Network - Ağ** : Paketlerinin kaynak ve hedef arasında yönlendirilmesini ve iletilmesini sağlar.
-	- Paketlere IP adresi bilgileri verilir.
+	- Paketlere IP adresi bilgileri verilir. *L3 SWITCH VE ROUTER BURADA ÇALIŞIR*
 - **2. Data-Link - Veri Bağlantı** : Ağdaki cihazlar arasında doğrudan veri transferini yönetir ve hataları düzeltir.
-	- Paketlere MAC adresi verilir ve kuyruk kısmına hata kontrol değeri yazılır.
+	- Paketlere MAC adresi verilir ve kuyruk kısmına hata kontrol değeri yazılır. *L2 SWITCH BURADA ÇALIŞIR*
 - **1. Physical - Fiziksel** : Verinin fiziksel ortamda nasıl iletileceğini belirler.
-	- Data bitlere dönüştürülür ve iletim sağlanır.
+	- Data bitlere dönüştürülür ve iletim sağlanır. *HUB BURADA ÇALIŞIR*
 
 
 # GNU/Linux
