@@ -3,6 +3,7 @@
 ## Network Nedir ?
 > - Bir bağlam yardımıyla (kablo, wireless) cihazların birbiriyle iletişim kurmasını sağlayan ortam. Temelleri, Amerikan Savunma Bakanlığı Hava Kuvvetleri tarafından geliştirilen ARPANET ile atılmıştır.
 > - Fiziksel ve yazılımsal olmak üzere 2 boyuttan oluşur. 
+
 - **Fiziksel Network:** Network topolojisi, kablolar, switchler kısacası network cihazları.
 - **Yazılımsal Network:** Protokoller.
 
@@ -419,3 +420,4 @@ CentOS, güvenlik duvarı yönetimi için varsayılan olarak **firewalld** adlı
 **SCP** (Secure Copy Protocol) = SSH protokolü üzerinden güvenli dosya transferi.
 
 - scp C:\Users\Ali Asker\Desktop\ubuntu-22.04.3-live-server-amd64.iso ali@192.168.17.177/linux_path windowstaki bir dosyayı scp ile linuxa gönderir.
+
