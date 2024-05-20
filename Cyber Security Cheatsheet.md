@@ -276,7 +276,7 @@ Bir firewall, ağ trafiğini kontrol ederek yetkisiz erişimleri engelleyen bir 
 -  Nftables
 
 
-##### Ubuntu'da Firewall
+#### Ubuntu'da Firewall
 
 Ubuntu, güvenlik duvarı yönetimi için varsayılan olarak **UFW (Uncomplicated Firewall)** aracını kullanır.
 
@@ -289,7 +289,7 @@ Ubuntu, güvenlik duvarı yönetimi için varsayılan olarak **UFW (Uncomplicate
 - `sudo ufw allow from 192.168.203.1 to any port 22`: ipye özel ssh portunu açar ve filtrelemiş olur. 
 
 
-##### CentOS'ta Firewall
+#### CentOS'ta Firewall
 
 CentOS, güvenlik duvarı yönetimi için varsayılan olarak **firewalld** adlı dinamik bir güvenlik duvarı yönetim aracını kullanır.
 
