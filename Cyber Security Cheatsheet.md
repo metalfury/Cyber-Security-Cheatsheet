@@ -1,3 +1,115 @@
+# NETWORK
+
+## Network Nedir ?
+> - Bir bağlam yardımıyla (kablo, wireless) cihazların birbiriyle iletişim kurmasını sağlayan ortam. Temelleri, Amerikan Savunma Bakanlığı Hava Kuvvetleri tarafından geliştirilen ARPANET ile atılmıştır.
+> - Fiziksel ve yazılımsal olmak üzere 2 boyuttan oluşur. 
+- **Fiziksel Network:** Network topolojisi, kablolar, switchler kısacası network cihazları.
+- **Yazılımsal Network:** Protokoller.
+
+**Paket:** Ağ iletişiminde verilerin taşınması için kullanılan temel birimdir.
+
+**Hub:** Paketleri, üzerinde bağlı olan tüm hostlara ileten network cihazlarıdır.
+
+**Switch:** Paketleri, ARP tablosuna göre istenilen hedefe yönlendiren network cihazlarıdır.
+
+**Gateway:** Cihazların farklı networklere giderken kullandıkları geçit.
+
+**Router:** Farklı networkler arası iletişimi sağlayan network cihazlarıdır.
+
+**Firewall:** Gelen ve giden trafiği filtreleyen, denetleyen, ağ katmanında çalışan cihazlardır.
+
+**NIC(Network Interface Card):** Cihazların ethernet ağına bağlanmasını sağlayan donanım.
+
+**MAC Adresi:** NIC(network kartları)lerin sahip olduğu üreticiler tarafından sağlanan pratikte değişmez olan numaralardır.
+
+**Port:** Bilgisayar ağlarında belirlenmiş numaralı adreslerdir ve her biri belirli bir uygulamanın iletişim kurduğu noktayı temsil eder.
+
+**TCP(Transmission Control Protocol):** İnternet üzerinden veri iletimini sağlamak için kullanılan bir iletişim protokolüdür.  
+
+**UDP(User Datagram Protocol):** Veri bütünlüğünü garanti etmeyen, TCP/IP protokolüne göre daha hızlı iletim sağlayan bir iletişim protokolüdür. 
+
+**DNS(Domain Name System):** İsimleri IP adresine dönüştüren servis.
+
+**NAT(Network Address Translation):** Private IP adreslerinin dış ağa erişebilmesi için public IP adresine çevrilmesi işlemi.
+
+**PAT(Port Address Translation):** Ağdaki private IP adreslerinin tek bir genel IP adresine dönüştürürken, TCP veya UDP port numaralarının değiştirilmesi işlemi.
+
+## Network Topolojileri 
+> Ring, Bus, Star, Mesh
+- **Ring Topoloji:** Cihazlar birbirine halka şeklinde bağlanmıştır. Bir paket yollandığında, paket hedef cihaza ulaşana kadar tüm cihazlara uğrar. (Tokenli mimaride tokene sahip cihaz paketi alır.)
+
+- **Bus Topoloji:** Bütün cihazlar tek bir hat üzerinde birbirine bağlıdır. Bir cihaz diğer cihaza paket yollamadan önce hattın boş olduğuna emin olmak zorundadır, aksi halde çakışma yaşanacaktır. Veri tüm cihazlara yollanır fakat sadece hedef makineye ulaşır. Düşük performanslı bir topolojidir.
+
+- **Star Topoloji:** Cihazlar bir hub veya switch yardımıyla birbirlerine bağlanırlar. 
+	Hub ile oluşturulan topolojiler:
+		Gelen paketleri tüm portlara yollar.
+		Herkesin paketi herkese gidebilir.
+		Yoğun bir trafik oluşur. 
+		Güvenlik zafiyetleri oluşur.
+	Switch ile oluşturulan topolojiler:
+		Switch üzerinde yazılım çalışır.
+		Bu sebeple paketler herkese gönderilmez. Paketin gideceği cihazlar tanınır.
+		Zafiyetler kısmen çözülmüş olur.
+
+- **Mesh Topoloji:** Bütün cihazlar birbiriyle bağlıdır. Herhangi bir kablo koparsa sistem çökmez. Paketler sadece alıcısına ulaşır. Bir arıza oluştuğunda tespiti kolaydır.
+
+> Network Hablerleşmesinde Kullanılan Protokoller: NETBUI, IPX/SPX, TCP/IP
+
+## IP Subnetting
+
+**Subnet Mask:** Cihazların hangi ağ bloğunda bulunduğunu öğrenmemizi sağlayan tanımlayıcıdır.
+
+**Network ID:** Makinelerin bulunduğu networkün adresini belirler. IP adresinin alt ağ maskesi ile and işlemi kullanılarak elde edilir.
+
+**IP Adresi:** TCP/IP protokolüne göre network haberleşmesi yapacak cihazların alması gereken numaralardır. Bu numaralar ağdaki diğer cihazlarla çakışmamalıdır. 
+- 4 oktetten oluşur. (Böyle geliştirildi.)
+- Her oktet 8 bitten oluşur.
+- IPv4 adresleri, private ve public olmak üzere 2 bölümden oluşur.
+- Private Blok: Sadece iç network haberleşmesinde kullanılan ip adreslerini içerir.
+	- 10.0.0.0/8 – 10.255.255.255 
+	- 172.16.0.0/12 – 172.31.255.255
+	- 169.254.0.0/16 - 169.254.255.255 -> Link Local
+	- 192.168.0.0/24 – 192.168.255.255
+* Public Blok: Dış network haberleşmesinde kullanılan ip adreslerini içerir.
+* IP Adresleri bloklarına göre ve kullanım senaryolarına göre sınıflara ayrılmıştır.
+* Class A: 0.0.0.0 - 127.255.255.255
+* Class B: 128.0.0.0 - 191.255.255.255
+* Class C: 192.0.0.0 - 223.255.255.255
+* Class D: 224.0.0.0 - 239.255.255.255 -> (Özel kullanım)
+* Class E: 240.0.0.0 - 255.255.255.255 -> (Bilimsel araştırmalar için ayrılmıştır, internet ortamında kullanılmazlar.)
+
+10.10.0.0, 0.0.255.255
+Bir Networkte Bulunan Host Sayısı: 
+- (2^n - 2) 
+- 2 -> 2lik sistem
+- n -> Subnet Mask de 0 olan bit sayısı
+* 2 -> 1. Network ID | 2. Broadcast IP
+
+## Paket İletim Türleri
+
+- **Unicast:** Paket bir kaynaktan sadece tek bir hedefe gider.
+- **Multicast:** Paket bir kaynaktan belirli bir gruba gider.
+- **Broadcast:** Paket bir kaynaktan bütün hedeflere gider.
+
+## OSI Referans Modeli
+> Ağlar üzerinde çalışan cihazların birbirleriyle iletişimini nasıl kuracağını tanımlayan standart model.
+
+- **7. Application - Uygulama** : Kullanıcıların doğrudan etkileşimde bulunduğu katmandır
+	-  Web tarayıcı, e-posta, dosya aktarımı
+- **6. Presentation - Sunum** : Veri formatlama, şifreleme ve sıkıştırma gibi işlemlerden sorumlu katman.
+	- ASCII-Unicode dönüşümü, SSL/TLS
+- **5. Session - Oturum** : Oturumlar arasındaki ilişkiyi yönetir.
+	- Sosyal medya hesaplarında oturumun açık/kapalı durması.
+- **4. Transport - İletim** : Veri paketlerinin kaynak ve hedef arasında güvenilir bir şekilde iletilmesini sağlar.
+   	- Paketlere port numarası ve sıra numarasınin eklenmesi.
+- **3. Network - Ağ** : Paketlerinin kaynak ve hedef arasında yönlendirilmesini ve iletilmesini sağlar.
+	- Paketlere IP adresi bilgileri verilir.
+- **2. Data-Link - Veri Bağlantı** : Ağdaki cihazlar arasında doğrudan veri transferini yönetir ve hataları düzeltir.
+	- Paketlere MAC adresi verilir ve kuyruk kısmına hata kontrol değeri yazılır.
+- **1. Physical - Fiziksel** : Verinin fiziksel ortamda nasıl iletileceğini belirler.
+	- Data bitlere dönüştürülür ve iletim sağlanır.
+
+
 # GNU/Linux
 
 
