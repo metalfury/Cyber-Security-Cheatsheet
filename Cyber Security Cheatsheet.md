@@ -534,3 +534,157 @@ CentOS, güvenlik duvarı yönetimi için varsayılan olarak **firewalld** adlı
 		- **F:**= Mount edilecek dizin.
 
 > Bu adımlardan sonra, işletim sistemleri üzerinden belirlenen dizine (/home/sharing) NFS servisi üzerinden erişim sağlanmış olur.
+
+
+
+# RAID
+
+##### SUNUCU TÜRLERİ
+-  Tower Sunucular
+-  Rac Sunucular
+-  Blade Sunucular
+
+---
+
+>**SPARE DISK**
+  Volumeden ayrı tutulan boş disktir ve eğer bir disk bozulursa onun yerine geçer. İsteğe göre spare disk ayrılabilir.
+
+
+>**VOLUME** 
+  Raidlerin kendi kurallarına uygun özellikleri ile birleşip tek bir depolama alanı ortaya çıkarmasına denir.
+
+
+>**HOT PLUG**
+  Sunucuya bağlı olan bir donanım bileşeninin, sistemin çalışır durumdayken çıkarılıp takılabilme özelliğini ifade eder.
+
+
+>**RAID MİMARİSİ** 
+  Sunucularda hem disklerin yedeklenmesini, hem de daha performanslı çalışmasını sağlar. Raid yapabilmek için sunucuda raid kartı olması şarttır.
+
+
+---
+
+
+**RAID 0** 
+
+-  2 ya da daha çok diskin bir araya getirilmesiyle yapılır.
+-  Performans amaçlıdır. Ne kadar çok disk bir araya getirilirse performans da o kadar artar.
+-  Yedeklilik sağlamaz sadece performans sağlar.
+
+
+**RAID 1**
+
+-  2 diskin birleştirilmesiyle yapılır.
+-  Diskin biri kaybedilse bile diğer diskle devam edilir.
+-  Performans artışı sağlamaz sadece yedeklilik sağlar.
+
+
+**RAID 5**
+
+-  3 ya da daha fazla diskle yapılabilir.
+-  En çok kullanılan raid türüdür.
+-  Hem performans hem de yedeklilik sağlar.
+-  Disklerin %33'lük bölümünü kendisine ayırır.
+-  Veri kaybı 2 diskin bozulmasıyla gerçekleşir.
+
+
+**RAID 10(1+0)**
+
+-  En az 4 disk olabilir ve çift sayılarla artabilir (6-8-10)
+-  Önce her 2 disk kendi  içinde gruplanır. Yani RAID1 yapılır.
+-  Sonra bu gruplanan diskler bir araya getirilir ve RAID 0 yapılır.
+-  Hem performans hem de yedeklilik için kullanılır.
+-  Bir grupta bir disk toleransı vardır.
+
+
+**RAID 50(5+0)****
+
+-  En az 6 disk ile yapılır.
+-  Önce her 3 disk kendi içinde gruplanır. Yani RAID 5 yapılır.
+-  Sonra bu gruplanan diskler bir araya getirilir ve RAID 0 yapılır.
+-  En az 1 disk toleransı vardır.
+
+
+
+--- 
+
+
+# Storage Sistemleri
+
+>Dijital dünyada verinin tutulması için geliştirilmiş alanlardır.
+
+
+1- **Local Diskler**
+
+2- **Remote Storage**
+
+- 2.2- NAS(Network Attached Storage) Üniteleri
+
+- 2.3- SAN (Network Area Storage) Üniteleri
+
+- 2.4- VSAN Üniteleri(VmWare'a ait teknoloji)
+
+
+--- 
+
+
+**2.2 - NAS(Network Attached Storage) Üniteleri :**
+
+Üzerine çokca disk takabileceğiniz ve bu disklere uzaktan erişebileceğiniz sistemlerdir. Bir yazılımla diskleri konfigüre eder ve TCP/IP networkleri üzerinden sunuculara bağlanmasını sağlar. Diskleri konfigüre edebilmek için NAS yazılımı vardır. Örneğin Win2019'da NAS yazılımı birlikte gelir ve OpenSource NAS yazılımını sunuculara kendimiz kurabiliriz. 
+
+Disk entegre etme ve disk boyutları konusunda çok esnek bir teknolojidir. Maliyet ve performans açısından ve kullanımı kolay olduğundan günümüzde fazlaca kullanılır. TrueNAS adlı ürünü vardır ve İSO biçimindedir ayrıca istediğimiz sunucuya kurup NAS storage gibi kullanabiliriz. TCP/IP networkleri üzerinden çalışılabilir ve ip ile erişilebilir. NAS ünitesinde de RAID yapılandırılır.
+
+
+**NAS Teknolojisinin Alt Protokolleri :**
+
+  
+**1.ISCSI**
+
+- NAS ünitelerinde bulunan lunların TCP/IP network üzerinden storage sunuculara tanımlanabilmesi için kullanılan BLOKSTORAGE TEKNOLOJİSİDİR.
+- KVM, ESXI, HypverV de kullanılır ve oldukça popülerdir.
+- Sunucularda istediğimiz dosya sistemiyle formatlayıp istediğimiz gibi kullanırız.
+- Sunucunun üzerindeki disklerden yapılmış gibi kullanılabilir.
+- Makineye takılan bir diskle NAS üzerinden makineye ayrılan LUN(Logical Unit Number) aynı şeydir.
+- Blokstorage olmasından ötürü çok hızlıdır.
+- 3260 portundan çalışır
+
+
+>**LUN** = *Nas üniteleri, bir dizi disk sürücüsünden oluşan depolama birimleridir ve bu depolama birimleri üzerinde mantıksal birimlere bölünebilen alanlara sahiptir. Bu mantıksal birimlere LUN (Logical Unit Number) denir.*
+
+>**BLOKSTORAGE =** *Veriyi sabit boyutlu bloklar halinde düzenleyen bir depolama yöntemidir. Her bir blok, belirli bir sabit boyutta veriyi temsil eder ve birbirinden bağımsızdır. Blok depolama genellikle yüksek performans ve esneklik gerektiren uygulamalarda kullanılır.*
+
+  
+
+**2.NFS**
+
+- Open sourcedur.
+- Genelde Linuxlarda veya Unixte kullanılır, bir dosya paylaşım protokolüdür.
+
+  
+
+**3.SMB**
+
+- Bir microsoft protokolüdür ve endüstri standartı olarak yerleşmiştir.
+- NFS'in alternafidir ve dosya paylaşım teknolojisidir.
+- Windows tarafından geliştirilmiştir ve Windowslarda kullanılır.
+- Fakat günümüzde samba servisi ile birlikte Linuxlarda da kullanılabilir hale gelmiştir.
+
+  
+
+**4.S3**
+
+- Amazon tarafından geliştirilmiştir.
+- Storage tarafında cloud gibi hizmet vermek zorundaysak kullanılır.
+- Son kullanıcıya bir disk alanını kullandırır.
+- Onedrive ve googledrive'ın alternatifi olabilir.
+
+
+
+
+**2.3 - SAN (Storage Area Network) Üniteleri :**
+
+Çok sayıda diski bir araya getirebilir fakat NAS kadar esnek değildir. Sadece fiber kanal ile çalışır. TCP/IP protokolü ile çalışamaz. Kendine özgü SAN protokolü vardır. SAN switchleri ve HBA adlı sunuculara ve storagelara takılmış olan ethernet kartlarına benzer kartları vardır. 
+
+Bağlantı bu şekilde sağlanır. Eğer SAN'a bağlanılacaksa sunucularda da mutlaka HBA kartları olmalıdır. Performansı yüksek, hızlı ve güvenliği üst seviyededir bu nedenle büyük yapılarda kullanılır. TCP/IP kullanmadığı için ekstra güvenlidir. 25 yıldır var olan eski ve stabil bir sistemdir.
+
+>**HBA(Host Bus Adapter)=** *Bir bilgisayar sistemini veya sunucuyu bir Storage Area Network (SAN) üzerindeki depolama aygıtlarına bağlamak için kullanılan bir adaptördür.*
