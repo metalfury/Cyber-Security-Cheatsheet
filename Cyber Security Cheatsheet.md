@@ -1,11 +1,10 @@
 # NETWORK
 
 ## Network Nedir ?
-> - Bir bağlam yardımıyla (kablo, wireless) cihazların birbiriyle iletişim kurmasını sağlayan ortam. Temelleri, Amerikan Savunma Bakanlığı Hava Kuvvetleri tarafından geliştirilen ARPANET ile atılmıştır.
-> - Fiziksel ve yazılımsal olmak üzere 2 boyuttan oluşur. 
-
-- **Fiziksel Network:** Network topolojisi, kablolar, switchler kısacası network cihazları.
-- **Yazılımsal Network:** Protokoller.
+- Bir bağlam yardımıyla (kablo, wireless) cihazların birbiriyle iletişim kurmasını sağlayan ortam. Temelleri, Amerikan Savunma Bakanlığı Hava Kuvvetleri tarafından geliştirilen ARPANET ile atılmıştır.
+- Fiziksel ve yazılımsal olmak üzere 2 boyuttan oluşur. 
+	- **Fiziksel Network:** Network topolojisi, kablolar, switchler kısacası network cihazları.
+	- **Yazılımsal Network:** Protokoller.
 
 **Paket:** Ağ iletişiminde verilerin taşınması için kullanılan temel birimdir.
 
@@ -104,11 +103,14 @@ Bir Networkte Bulunan Host Sayısı:
 - **4. Transport - İletim** : Veri paketlerinin kaynak ve hedef arasında güvenilir bir şekilde iletilmesini sağlar.
    	- Paketlere port numarası ve sıra numarasınin eklenmesi.
 - **3. Network - Ağ** : Paketlerinin kaynak ve hedef arasında yönlendirilmesini ve iletilmesini sağlar.
-	- Paketlere IP adresi bilgileri verilir. *L3 SWITCH VE ROUTER BURADA ÇALIŞIR*
+	- Paketlere IP adresi bilgileri verilir.
+ 	- **L3 SWITCH VE ROUTER BURADA ÇALIŞIR**
 - **2. Data-Link - Veri Bağlantı** : Ağdaki cihazlar arasında doğrudan veri transferini yönetir ve hataları düzeltir.
-	- Paketlere MAC adresi verilir ve kuyruk kısmına hata kontrol değeri yazılır. *L2 SWITCH BURADA ÇALIŞIR*
+	- Paketlere MAC adresi verilir ve kuyruk kısmına hata kontrol değeri yazılır.
+ 	- **L2 SWITCH BURADA ÇALIŞIR**
 - **1. Physical - Fiziksel** : Verinin fiziksel ortamda nasıl iletileceğini belirler.
-	- Data bitlere dönüştürülür ve iletim sağlanır. *HUB BURADA ÇALIŞIR*
+	- Data bitlere dönüştürülür ve iletim sağlanır.
+ 	- **HUB BURADA ÇALIŞIR**
 
 
 # GNU/Linux
@@ -226,12 +228,12 @@ En sık kullanılan dosya sistemleri:
 > Sisteme bir uygulama veya servis eklendiğinde bu hesaplar oluşur ve servis & uygulama çalıştığında bu hesaplar ile çalışılır. 
 ***
 mert:x:1000:1000:mert:/home/mert:/bin/bash
-- mert: kullanıcı adı
-- x: parolanın /etc/shadow a taşındığını belirtir.
-- 1000: kullanıcı idsi
-- 1000: kullanıcının grup idsi
-- mert:/home/mert: mert kullanıcısının dizini
-- /bin/bash: mert kullanıcısının bash kullanım hakkı 
+- **mert**: kullanıcı adı
+- **x**: parolanın /etc/shadow a taşındığını belirtir.
+- **1000**: kullanıcı idsi
+- **1000**: kullanıcının grup idsi
+- **mert:/home/mert**: mert kullanıcısının dizini
+- **/bin/bash**: mert kullanıcısının bash kullanım hakkı 
 
 > Servis hesaplarında /nologin olduğundan ve /bin/bash olmadığından güvenlik açığı oluşturmaz.
 ***
@@ -336,8 +338,8 @@ Disk küçültme risklidir, tavsiye edilmez. Veri kaybı yaşanabilir.
 cfdisk aracı ile genişletme:
 - Diskin bitiş noktasından sonra boş alan var ise disk genişleyebilir.
 - Disk genişledikten sonra dosya sistemi de genişlemelidir.
-	- ext için: `resize2fs /dev/sdx`
-	- xfs için: `xfs_growfs /dev/sdx`
+	- **ext** için: `resize2fs /dev/sdx`
+	- **xfs** için: `xfs_growfs /dev/sdx`
 
 
 ### LVM
@@ -417,7 +419,118 @@ CentOS, güvenlik duvarı yönetimi için varsayılan olarak **firewalld** adlı
 
 ## Dosya Aktarımı 
 
-**SCP** (Secure Copy Protocol) = SSH protokolü üzerinden güvenli dosya transferi.
+### SCP (Secure Copy Protocol)
+- SSH protokolü üzerinden güvenli dosya transferi sağlar.
+	- `scp C:\Users\Ali Asker\Desktop\ubuntu-22.04.3-live-server-amd64.iso ali@192.168.17.177/linux_path`: Windowstaki bir dosyayı scp protokolü ile Linuxa gönderir.
 
-- scp C:\Users\Ali Asker\Desktop\ubuntu-22.04.3-live-server-amd64.iso ali@192.168.17.177/linux_path windowstaki bir dosyayı scp ile linuxa gönderir.
+### Samba 
+- SMB protokolü üzerinden Linux cihazlarda dosya paylaşımını sağlar. 
 
+#### Samba Server Kurulumu ve Dizin Paylaşımı:
+1. Samba servisi kurulur.
+	- `apt install samba`
+2. Paylaşım yapılacak dizin oluşturulur.(opsiyonel)
+	- `mkdir /home/share`
+3. Paylaşılacak dizine, erişim yapılacak kullanıcı için sahiplik ve izin atamaları yapılır.
+	- `chown mert:mert /home/share`
+	- `chmod 775 /home/share`
+4. Dizine erişecek kullanıcıya samba parolası tanımlanır.
+	- `smbpasswd -a mert` (-a parametresi ile kullanıcı samba veritabanına eklenir.)
+5. Samba config dosyasında düzenlemeler yapılır.
+   	- `nano /etc/samba/smb.conf`
+	- **`interface` konfigürasyonu**
+		- `interfaces = 127.0.0.0/8 ens33`
+			- `interfaces`: Samba sunucusunun dinleyeceği arayüzleri tanımlar.
+			- `127.0.0.0/8`: Samba sunucusunun 127.0.0.0/8 ip bloğuna gelen istekleri dinleyeceği belirtilir.
+ 			- `ens33`: Samba sunucusunun ens33 network arayüzüne gelen istekleri dinleyeceğini belirtir.
+	- **Dizin tanımlaması**
+		- ```
+    			[sambashare]
+    			comment = Samba on Ubuntu
+    			path = /home/share
+    			read only = no
+    			writable = yes
+    			browsable = yes
+    			guest no
+    			valid users = @mert, @ali 		
+		- **comment**: Dizin paylaşımı hakkında bilgi verici yorum.
+		- **path**: Paylaşım yapılacak dizin belirtilir.
+		- **read only = no**: Dizinde okuma işlemi yapılabileceği belirtilir.
+		- **writable = yes**: Dizinde yazma işlemi yapılabileceği belirtilir.
+		- **browsable = yes**: Dizinin kendisinin ve alt dizinlerinin görüntülenebileceği belirtilir.
+		- **guest no**: Misafir kullanıcılara izin verilmeyeceği belirtilir.
+  		- **valid users = @mert, @ali**: Belirlenen kullanıcılara erişim izni verileceği belirtilir.	 
+6. Firewall üzerinden erişim izni verilir.
+   	- `ufw allow samba`
+
+> Bu adımlardan sonra belirlenen dizin (/home/share) Samba servisi ile paylaşılmış olur.
+
+#### Paylaşılan dizine erişmek için:
+##### Windows
+1. Çalıştır aracı açılır.  
+2. Paylaşım yapılan cihazın IP adresi yazılır.
+	- `\\192.168.234.167`
+3. Dizin görüntülenir.
+
+##### Linux
+1. Paylaşılan dizine erişmek için smbclient aracı yüklenir.
+	- `apt install smbclient`
+2. Erişilmek istenen dizin ve erişecek kullanıcı belirtilir.
+  	- `smbclient //192.168.234.135/sharing -U mert`
+  		- **smbclient**: Kullanılacak servis.
+  		- **//192.168.234.135/sharing**: Erişilecek dizin.
+   		- **-U**: Kullanıcı parametresi.
+   		- **mert**: Dizine erişecek kullanıcı.
+
+> Bu adımlardan sonra, işletim sistemleri üzerinden belirlenen dizine (/home/share) Samba servisi üzerinden erişim sağlanmış olur.
+
+### NFS
+- Samba alternatifi bir servistir. Genellikle Linux ve UNIX işletim sistemlerinde kullanılır. 2016 yılından sonra Windows cihazlarda kullanılabilir hale gelmiştir.
+- Paylaşılan dizinlerin, cihazlara mount edilmesiyle okuma/yazma işlemleri yapılır.
+
+#### NFS Server Kurulumu ve Dizin Paylaşımı
+1. NFS Server servisi kurulur.
+	- `apt install nfs-server-kernel`
+2. Paylaşılacak dizin oluşturulur. (opsiyonel)
+   	- `mkdir /home/sharing`
+3. Paylaşılacak dizine, erişim yapılacak kullanıcı için sahiplik ve izin atamaları yapılır.
+	- `chown mert:mert /home/sharing`
+	- `chmod 775 /home/sharing`
+4. NFS config dosyası düzenlenir. Bu dosyada dizinlerin hangi özelliklerle paylaşılacağı belirlenir.
+   	- `nano /etc/exports`
+   		-  /home/sharing  *(rw,sync,no_subtree_check)
+   	 		- **/home/sharing**: Paylaşılacak dizin.
+   	    		- **\***: Gelen her isteğin kabul edileceği belirtilir. IP adresi veya network ID yazılabilir.
+   	      		- **rw**: Dizine yazma işlemi yapılabileceği belirtilir.
+   	        	- **sync**: Dizinde olan değişiklerin, mount olduğu diğer dizinlere de senkronize olması sağlanır.
+   	         	- **no_subtree_check**: Alt ağaç yapısının taramasının yapılmayacağı belirtilir.
+5. NFS config dosyası ayarları aktif edilir.
+   	- `exportfs -a`
+6. NFS servisi yeniden başlatılır.
+   	- `systemctl restart nfs-server`
+7. Firewall üzerinden NFS servisine izin verilir.
+   	- `ufw allow nfs`
+   	- `ufw allow nfs/tcp`
+   	- `ufw allow nfs/udp`
+   
+> Bu adımlardan sonra belirlenen dizin (/home/sharing) NFS servisi ile paylaşılmış olur.
+
+#### Paylaşılan dizine erişmek için:
+##### Linux
+1. NFS Client servisi kurulur.
+	- `apt install nfs-common`
+2. Erişilmek istenen dizin, belirlenen dizine mount edilir.
+	- `mount -t nfs 192.168.234.135:/home/sharing /mnt/share`
+		- **mount -t nfs**: NFS protokolü ile paylaşılan dizini mount et.
+ 		- **192.168.234.135:/home/sharing**: Paylaşılan dizin belirtilir.
+   		- **/mnt/share**: Mount edilecek dizin belirtilir.
+
+##### Windows
+1. NFS Client servisi kurulur. (powershell veya windows eklentileri üzerinden.)
+2. Erişilmek istenen dizin, belirlenen dizine mount edilir.
+	- `mount 192.168.234.134:/home/sharing F:`
+		- **mount**: Mount parametresi.
+		- **192.168.234.134:/home/sharing**: Paylaşılan dizin.
+		- **F:**= Mount edilecek dizin.
+
+> Bu adımlardan sonra, işletim sistemleri üzerinden belirlenen dizine (/home/sharing) NFS servisi üzerinden erişim sağlanmış olur.
