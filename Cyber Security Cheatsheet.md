@@ -541,7 +541,7 @@ CentOS, güvenlik duvarı yönetimi için varsayılan olarak **firewalld** adlı
 
 ##### SUNUCU TÜRLERİ
 -  Tower Sunucular
--  Rac Sunucular
+-  Rack Sunucular
 -  Blade Sunucular
 
 ---
@@ -558,7 +558,7 @@ CentOS, güvenlik duvarı yönetimi için varsayılan olarak **firewalld** adlı
   Sunucuya bağlı olan bir donanım bileşeninin, sistemin çalışır durumdayken çıkarılıp takılabilme özelliğini ifade eder.
 
 
->**RAID MİMARİSİ** 
+>**RAID KARTI** 
   Sunucularda hem disklerin yedeklenmesini, hem de daha performanslı çalışmasını sağlar. Raid yapabilmek için sunucuda raid kartı olması şarttır.
 
 
@@ -569,14 +569,15 @@ CentOS, güvenlik duvarı yönetimi için varsayılan olarak **firewalld** adlı
 
 -  2 ya da daha çok diskin bir araya getirilmesiyle yapılır.
 -  Performans amaçlıdır. Ne kadar çok disk bir araya getirilirse performans da o kadar artar.
--  Yedeklilik sağlamaz sadece performans sağlar.
+-  Yedeklilik sağlamaz. Yüksek performans sağlar.
+-  Bir diskte bir arıza meydana gelirse diskteki veri erişilemez hale gelir.
 
 
 **RAID 1**
 
 -  2 diskin birleştirilmesiyle yapılır.
--  Diskin biri kaybedilse bile diğer diskle devam edilir.
--  Performans artışı sağlamaz sadece yedeklilik sağlar.
+-  Diskler birbirinin klonu durumundadır. Diskin biri kaybedilse bile diğer diskle devam edilir.
+-  Performans artışı sağlamaz. Sadece yedeklilik sağlar.
 
 
 **RAID 5**
@@ -584,24 +585,27 @@ CentOS, güvenlik duvarı yönetimi için varsayılan olarak **firewalld** adlı
 -  3 ya da daha fazla diskle yapılabilir.
 -  En çok kullanılan raid türüdür.
 -  Hem performans hem de yedeklilik sağlar.
--  Disklerin %33'lük bölümünü kendisine ayırır.
+-  Her 2 diskin doğruluk bilgisi 3. diskte yedeklenir. Bir disk bozulursa 3. diskteki doğrulama bilgisi ile veri tekrardan olusturulmaya çalışılır.
+-  Toplam boyutun 3 te 1 i disk doğrulamasına gider.
 -  Veri kaybı 2 diskin bozulmasıyla gerçekleşir.
 
 
 **RAID 10(1+0)**
 
 -  En az 4 disk olabilir ve çift sayılarla artabilir (6-8-10)
--  Önce her 2 disk kendi  içinde gruplanır. Yani RAID1 yapılır.
+-  Önce her 2 disk kendi içinde RAID 1 yapılır.
 -  Sonra bu gruplanan diskler bir araya getirilir ve RAID 0 yapılır.
 -  Hem performans hem de yedeklilik için kullanılır.
+-  Aynı RAID den 2 disk bozulursa veri kaybı yaşanır.
 -  Bir grupta bir disk toleransı vardır.
 
 
 **RAID 50(5+0)****
 
 -  En az 6 disk ile yapılır.
--  Önce her 3 disk kendi içinde gruplanır. Yani RAID 5 yapılır.
+-  Önce her 3 disk kendi içinde RAID 5 yapılır.
 -  Sonra bu gruplanan diskler bir araya getirilir ve RAID 0 yapılır.
+-  Aynı RAID den 2 disk bozulursa veri kaybı yaşanır.
 -  En az 1 disk toleransı vardır.
 
 
@@ -630,9 +634,9 @@ CentOS, güvenlik duvarı yönetimi için varsayılan olarak **firewalld** adlı
 
 **2.2 - NAS(Network Attached Storage) Üniteleri :**
 
-Üzerine çokca disk takabileceğiniz ve bu disklere uzaktan erişebileceğiniz sistemlerdir. Bir yazılımla diskleri konfigüre eder ve TCP/IP networkleri üzerinden sunuculara bağlanmasını sağlar. Diskleri konfigüre edebilmek için NAS yazılımı vardır. Örneğin Win2019'da NAS yazılımı birlikte gelir ve OpenSource NAS yazılımını sunuculara kendimiz kurabiliriz. 
+Üzerine çokca disk takabileceğiniz ve bu disklere uzaktan erişebileceğiniz sistemlerdir. Bir yazılımla diskleri konfigüre eder ve TCP/IP networkleri üzerinden sunuculara bağlanmasını sağlar. Diskleri konfigüre edebilmek için NAS yazılımı vardır. Örneğin Win2019'da NAS yazılımı birlikte gelir ve OpenSource NAS yazılımları sunuculara kurulabilir. 
 
-Disk entegre etme ve disk boyutları konusunda çok esnek bir teknolojidir. Maliyet ve performans açısından ve kullanımı kolay olduğundan günümüzde fazlaca kullanılır. TrueNAS adlı ürünü vardır ve İSO biçimindedir ayrıca istediğimiz sunucuya kurup NAS storage gibi kullanabiliriz. TCP/IP networkleri üzerinden çalışılabilir ve ip ile erişilebilir. NAS ünitesinde de RAID yapılandırılır.
+NAS'lar, disk entegre etme ve disk boyutları konusunda çok esnektir. Maliyet ve performans açısından ve kullanımı kolay olduğundan günümüzde fazlaca kullanılır. TrueNAS ürünü istenilen sunucuya işletim sistemi gibi kurulup, o server NAS storage gibi kullanılabilir. TCP/IP networkleri üzerinden çalışılabilir ve ip ile erişilebilir. NAS ünitelerinde RAID yapıları kullanılabilir.
 
 
 **NAS Teknolojisinin Alt Protokolleri :**
@@ -642,14 +646,13 @@ Disk entegre etme ve disk boyutları konusunda çok esnek bir teknolojidir. Mali
 
 - NAS ünitelerinde bulunan lunların TCP/IP network üzerinden storage sunuculara tanımlanabilmesi için kullanılan BLOKSTORAGE TEKNOLOJİSİDİR.
 - KVM, ESXI, HypverV de kullanılır ve oldukça popülerdir.
-- Sunucularda istediğimiz dosya sistemiyle formatlayıp istediğimiz gibi kullanırız.
-- Sunucunun üzerindeki disklerden yapılmış gibi kullanılabilir.
-- Makineye takılan bir diskle NAS üzerinden makineye ayrılan LUN(Logical Unit Number) aynı şeydir.
+- Sunucularda storagelar istenilen dosya sistemiyle formatlanıp istenildiği gibi kullanılabilir.
+- Makineye takılan fiziksel bir disk ile NAS üzerinden makineye ayrılan LUN(Logical Unit Number) aynı şeydir.
 - Blokstorage olmasından ötürü çok hızlıdır.
-- 3260 portundan çalışır
+- 3260 portundan çalışır.
 
 
->**LUN** = *Nas üniteleri, bir dizi disk sürücüsünden oluşan depolama birimleridir ve bu depolama birimleri üzerinde mantıksal birimlere bölünebilen alanlara sahiptir. Bu mantıksal birimlere LUN (Logical Unit Number) denir.*
+>**LUN** = *NAS üniteleri, bir dizi disk sürücüsünden oluşan depolama birimleridir ve bu depolama birimleri üzerinde mantıksal birimlere bölünebilen alanlara sahiptir. Bu mantıksal birimlere LUN (Logical Unit Number) denir.*
 
 >**BLOKSTORAGE =** *Veriyi sabit boyutlu bloklar halinde düzenleyen bir depolama yöntemidir. Her bir blok, belirli bir sabit boyutta veriyi temsil eder ve birbirinden bağımsızdır. Blok depolama genellikle yüksek performans ve esneklik gerektiren uygulamalarda kullanılır.*
 
@@ -688,3 +691,178 @@ Disk entegre etme ve disk boyutları konusunda çok esnek bir teknolojidir. Mali
 Bağlantı bu şekilde sağlanır. Eğer SAN'a bağlanılacaksa sunucularda da mutlaka HBA kartları olmalıdır. Performansı yüksek, hızlı ve güvenliği üst seviyededir bu nedenle büyük yapılarda kullanılır. TCP/IP kullanmadığı için ekstra güvenlidir. 25 yıldır var olan eski ve stabil bir sistemdir.
 
 >**HBA(Host Bus Adapter)=** *Bir bilgisayar sistemini veya sunucuyu bir Storage Area Network (SAN) üzerindeki depolama aygıtlarına bağlamak için kullanılan bir adaptördür.*
+
+# WINDOWS
+
+#### Client OS
+Son kullanıcı için geliştirilen işletim sistemleridir.
+
+- **WINDOWS 3.1**
+  - İlk kullanıcı arayüzü deneyimini sunan sürüm.
+- **Windows 95**
+  - Windows'un tanındığı ilk popüler sürüm.
+- **Windows 98**
+- **Windows 2000 PRO**
+  - Kurumsal yapılar için kullanıldı.
+- **Windows ME**
+- **Windows XP**
+- **Windows Vista**
+- **Windows 7**
+- **Windows 8**
+- **Windows 10**
+- **Windows 11**
+
+#### Server OS
+Servisler, hizmetler, web hizmeti, dizin hizmeti ve veri tabanı hizmeti sağlamak için tasarlanmış işletim sistemleridir.
+
+- **Windows NT**
+- **Windows 2000**
+  - Grafik arayüzü ve Active Directory (AD) ile gelen sürüm.
+- **Windows 2003**
+- **Windows 2003 R2**
+- **Windows 2008**
+- **Windows 2008 R2**
+- **Windows 2012**
+- **Windows 2012 R2**
+- **Windows 2016**
+- **Windows 2019**
+- **Windows 2022**
+
+### SAM (Security Account Manager)
+Windows sistemlerinde bulunan kullanıcı veritabanıdır.
+
+- **Administrator**
+  - Windows sistemlerdeki en yetkili kullanıcıdır. `root` gibi.
+- **Administrators Grubu**
+  - Sistemdeki en yetkili kullanıcıları içeren gruptur. `sudoers` gibi.
+- **Backup Operators**
+  - Sistemde yedek alabilecek kullanıcılar bu grupta bulunur.
+- **Users**
+  - Tüm kullanıcılar `Users` grubuna dahildir.
+- **Local Security Policy**
+  - Sistemin yerel güvenlik yapılandırmaları burada yapılır. Standalone çalışan bir sunucuda (SAM veritabanı ile çalışan) grupların yetkileri Local Security Policy'den gelir.
+
+### Active Directory (AD)
+Microsoft'un geliştirdiği bir dizin hizmetidir ve bir ağdaki kullanıcıların, bilgisayarların, yazıcıların ve diğer kaynakların yönetimini sağlayan bir veritabanı ve hizmet sunucusu sistemidir. AD alanına giren cihazlar, kimliğini AD üzerinde doğrular ve hem kendi etki alanlarına hem de farklı etki alanlarına erişim sağlayabilirler. Kural oluşturma, politika oluşturma, sistem yönetimi imkanlarını sunar. Merkezi yönetim genelde Windows için kullanılırken kimlik doğrulama her sistem için kullanılmaktadır.
+
+- **Domain**
+  - Altında kullanıcı, grup, bilgisayar, OU gibi nesneleri barındıran yapıdır.
+- **Child Domain**
+  - Domain'in altında bulunan yapı.
+- **Forest**
+  - Altında bir veya birden çok domain barındıran yapıdır.
+- **DC (Domain Controller)**
+  - Bir domain'in tüm bilgilerini içeren kontrolcüdür. AD yapıların kalbidir. AD veritabanı Domain Controller üzerinde durur. Yani AD yapısının her şeyini Domain Controller tutar. DC yapısını oluşturduğumuzda AD yapısının oluştuğu anlamına gelir.
+- **DNS**
+  - Domain ile ilgili isim çözümlerini yapan sistemdir.
+- **FQDN**
+  - Maksimum 255 karakterden oluşan, birbirinden noktayla ayrılan bir isimlendirme standardı.
+- **MMC (Microsoft Management Console)**
+- **Kerberos**
+  - Active Directory sistemlerindeki güvenli doğrulama sistemi.
+- **NTLM**
+  - Eski sistemlerde kullanılan doğrulama sistemi. Güvenlik açığı yaratabilir.
+- **UNC Path (Uniform Name Convention)**
+  - Ağ üzerinde bir dosyaya erişmek için belirtilen yol.
+
+#### Active Directory DNS
+AD yapısına aldığımız makineleri ve bunları alırken DC bulma işlemlerini DNS gerçekleştirir. AD'deki isimleri IP'ye, IP'leri isimlere DNS çevirir. DNS durursa AD durur, çalışmaz. AD yapısını ilk kurarken DNS'i de kurmamız gerekir.
+
+- **Active Directory İlk DC Kurulumu**
+  - İlk olarak makinemize statik bir IP tanımlamamız gerekiyor (IPv4). Statik IP tanımlarken DNS sunucu olarak kendi IP'sini tanımlıyoruz. Firewall'u kapatmamız gerekiyor. Tercihen daha rahat çalışabilmek için uzak masaüstü izinlerini açabiliriz.
+  - Windows 2019 için Server Manager uygulamasına giriyoruz. "Add roles and features" diyerek servis kurulumu penceresini açıyoruz. "Active Directory Domain Services" paketini seçerek yüklüyoruz (next-install).
+  - Bu adımları tamamladıktan sonra Server Manager uygulaması içinde sağ üst köşede bir sarı ünlem çıkıyor. Buraya tıklayarak sihirbazı açıyoruz. Burada domain kısmına bir isim vermemiz gerekiyor. İsim verirken FQDN ismi koymamız gerekiyor (deneme.local).
+    - **Add a domain controller to an existing domain:** Var olan bir domain için seçmemiz gerekiyor.
+    - **Add a new domain to an existing forest:** Var olan bir forest'a yeni bir domain ekleyeceksek seçiyoruz.
+    - **Add a new forest:** Yeni bir domain oluşturmamız gerekiyor.
+  - **Forest Functional Level:** Windows Server 2016
+  - **Domain Functional Level:** Windows Server 2016
+  - Aynı seçenek sayfasında "Domain Name System (DNS) server" seçeneğini seçiyoruz ve DNS'i kuruyoruz. Yedekten geri dönmek için bir şifre belirlememiz gerekiyor. "Next" diyoruz ve "Install" diyerek kuruyoruz. Restart ederek Active Directory ortamını ayağa kaldırmış oluyoruz.
+  - **Active Directory veritabanı:** NTDS olarak geçer. AD kurulduğunda SAM veritabanı kilitlenip kaldırılır ve NTDS çalışmaya başlar.
+
+- **İlk Kontroller ve Yönetim Araçlarının Tanıtılması**
+  - **Active Directory Users and Computers:** AD ile ilgili birçok işlemi buradan yapabiliyoruz.
+  - **Active Directory Sites and Services:** Siteleri buradan yöneteceğiz. AD sayfalarını yönetebiliriz.
+  - **Active Directory Domain and Trusts:** AD mantıksal yapısında yeni domainler eklediğimizde, child domainler eklediğimizde buradan yönetiriz.
+  - **Active Directory ADSI Edit:** İleri düzey işlemlerde buradan yönetim yapacağız.
+
+- **Active Directory Objeleri**
+  - AD ortamında objeler bizim her şeyimizdir. AD ortamında göreceğimiz kullanıcı hesapları, bilgisayar hesapları, gruplar, organizasyonel birimler (OU), konteynerlar birer objedir. Hazır olarak gelen gruplar vardır.
+
+- **Active Directory Domain'e Alma İşlemi**
+  - Statik IP veriyoruz, DNS olarak AD makinemizin IP adresini veriyoruz.
+  - This PC → Properties → Advanced System Settings → Computer Name → Change → Domain seç → Kendi domain ismimizi koyacağız. → Restart
+
+### Linux - Unix AD Kimlik Doğrulaması
+
+- **SSSD**
+  - Linux ve Unix benzeri işletim sistemlerinde kimlik doğrulama ve yetkilendirme süreçlerini yönetmek için kullanılır.
+  - **Yerel Önbellekleme:** Ağ üzerinden aldığı kimlik doğrulama ve yetkilendirme bilgilerini yerel olarak önbelleğe alır. Ağ bağlantısı olmadan bile kullanıcılar giriş yapabilir.
+  - **Offline Desteği:** SSSD, çevrimdışı çalışabilir.
+
+#### Kurulum ve Kullanım
+```sh
+	apt install sssd-ad sssd-tools realmd adcli
+	realm -v discover vigilante.local  # Domain hakkında bilgi
+	realm join vigilante.local  # Domain'de kimlik doğrulaması
+	pam-auth-update --enable mkhomedir  # Home dizinini aktif etme
+```
+### Group Policy Nedir?
+
+Group Policy, Active Directory (AD) ortamındaki tüm domainlerdeki cihazlara kısıtlama yapmamızı, yetkilendirme işlemlerini ve mevcut programları gözlemlememizi sağlayan temel bir konfigürasyon aracıdır. AD yapısının temel bileşenlerinden biridir ve çoğu işlem Group Policy Management aracı ile gerçekleştirilir. Varsayılan olarak, oluşturmadığımız bazı Group Policy'ler mevcuttur.
+
+#### Kullanıcı Hesapları
+- **Kullanıcı hesapları:** Ali, Veli gibi kullanıcıların AD ortamına giriş yapmalarını ve yetki tanımlamalarını sağlayan objelerdir. Her kullanıcı bir objedir.
+
+#### Bilgisayar Hesapları
+- **Bilgisayar hesapları:** CEM PC, Satış PC gibi bilgisayarlara kısıtlamalar uygulanabilir. AD yapısındaki her cihaz bir objedir.
+
+#### Gruplar
+- **Gruplar:** Oluşturabileceğimiz veya mevcut olan gruplar vardır. Belirli kullanıcıları üye yapabileceğimiz ve ortak yetki verebileceğimiz gruplardır, bu da yönetimi kolaylaştırır.
+
+#### Organizational Units (OU)
+- **OU:** Üzerinde group policy uygulanabilen nesnelerdir. Kullanıcıları bu nesnelere dahil ederek yetki işlemleri yapılabilir.
+
+#### Konteyner
+- **Konteyner:** Group policy’ler tanımlanamaz, genellikle basit işlemler için kullanılır ve sınıflandırma amacı taşır.
+
+#### Yönetici Grupları
+- **Enterprise Admin Group:** Forest çapında yetkilidir ve anlamlı olabilmesi için birden fazla domain olması gerekir. Tek domain'de Domain Admin Group gibidir.
+- **Domain Admin Group:** AD domain çapında yetkilidir. Kullanıcı ekleme, çıkarma ve yetki verme işlemlerini yapabilirler. Neredeyse sınırsız yetkileri vardır.
+- **Administrators:** Domain Controller (DC) üzerinde tam yetkiye sahiptirler. AD veri tabanında yetkilidirler.
+
+#### Güvenlik Politikaları
+- **Domain Security Policy:** AD kurulumu yapıldığında oluşur ve güvenlik ayarları yapılandırılmıştır. Örneğin, güçlü şifre politikası.
+- **Domain Controller Security Policy:** DC'leri etkiler ve basit kullanıcıların giriş yapmasını sağlar.
+- **Local Security Policy:** AD kurulmadan önce vardır ve AD domain'ine dahil olmayan makineleri etkiler. Dahil olduktan sonra Domain Security Policy’den etkilenirler.
+
+### Group Policy Yönetim Aracı
+
+Administrative Tools → Group Policy Management üzerinden bulunabilir. Burada Default Domain Policy gibi poliçeler görülebilir ve yönetilebilir. Poliçeler bulunduğu dizini ve dizinin içindeki tüm alt dizinleri etkiler.
+
+Default Domain Policy'ye sağ tıklayarak ve "Edit" seçeneğini seçerek yönetim paneline erişim sağlayabilirsiniz.
+
+- **Security Settings:** Administrative Tools → Group Policy Management → Default Domain Policy → Edit → Computer Configuration → Policies → Windows Settings → Security Settings → Account Policy.
+- **Computer Configuration ve User Configuration arasındaki fark:** Yapılan değişikliklerin uygulanma süresi farklıdır (60 dakikayı bulabilir). Anında uygulamak için CMD konsolunda `gpupdate /force` komutu kullanılabilir.
+
+#### Politikalar
+- **Password Policy:** Kullanıcıların şifre politikalarını düzenler. Örneğin, minimum şifre uzunluğu ve şifrenin geçerlilik süresi.
+- **Audit Policy:** Örneğin, bir kullanıcı 3 kez yanlış şifre girdiğinde hesabın kilitlenmesini sağlar.
+
+>  Computer Configuration'da yapılan değişiklikler bilgisayar objelerini, User Configuration'da yapılan değişiklikler kullanıcı objelerini etkiler.
+>  Computer Configuration'da yapılan ayarlar bilgisayar çalıştırıldığında aktif olurken, User Configuration'da yapılan değişiklikler kullanıcı giriş yaptıktan sonra geçerli olur.
+
+#### Kapsam ve Yetkilendirme
+- **Scope:** GPO'nun uygulanacağı kapsam.
+- **Delegation:** GPO'yu değiştirme yetkisine sahip olan kişiler.
+
+### IPsec
+
+- **IPsec:** Uygulanan kurallara göre TCP/IP paketlerinin şifrelenmesini sağlar.
+
+#### IPsec Protokolleri
+- **Client:** IPsec normal çalışır. Karşı taraf kriptolu iletişim isterse iletişim kriptolu olur. Varsayılan olarak kriptosuzdur.
+- **Secure Server:** İletişim sadece kriptolu olarak kurulmak istenir. Kriptosuz iletişim sağlanmaz.
+- **Server:** IPsec kriptolu iletişim ister. Karşı taraf da kriptolu iletişim isterse iletişim kriptolu olur. Karşı taraf kriptosuz iletişim isterse iletişim kriptosuz olur. Varsayılan olarak kriptolu, gerekirse kriptosuz çalışır.
+
+
