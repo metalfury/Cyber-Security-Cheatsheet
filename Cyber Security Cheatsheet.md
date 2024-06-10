@@ -1,6 +1,7 @@
 # NETWORK
 
 ## Network Nedir ?
+
 - Bir bağlam yardımıyla (kablo, wireless) cihazların birbiriyle iletişim kurmasını sağlayan ortam. Temelleri, Amerikan Savunma Bakanlığı Hava Kuvvetleri tarafından geliştirilen ARPANET ile atılmıştır.
 - Fiziksel ve yazılımsal olmak üzere 2 boyuttan oluşur. 
 	- **Fiziksel Network:** Network topolojisi, kablolar, switchler kısacası network cihazları.
@@ -218,9 +219,11 @@ En sık kullanılan dosya sistemleri:
 
 - Parolaları içeren dosya: */etc/shadow*
 
+
 - Grup bilgilerinin saklandığı dosya: */etc/group*
 
 - Root yetkisi olan birimleri içeren dosya: */etc/sudoers*
+
 
 - Kullanıcı veritabanını içeren dosya: */etc/passwd*
 
@@ -228,6 +231,7 @@ En sık kullanılan dosya sistemleri:
 > Sisteme bir uygulama veya servis eklendiğinde bu hesaplar oluşur ve servis & uygulama çalıştığında bu hesaplar ile çalışılır. 
 ***
 mert:x:1000:1000:mert:/home/mert:/bin/bash
+
 - **mert**: kullanıcı adı
 - **x**: parolanın /etc/shadow a taşındığını belirtir.
 - **1000**: kullanıcı idsi
@@ -263,7 +267,6 @@ su: switch user
 
 > *Linuxlarda sudo servisi kurulu gelir. root olarak giriş  yapmadığımızda bile sudo grubuna dahilse her şeyi yönetebilir.*
 
-
 ## Linux'ta dosya izinleri:
 
 
@@ -297,6 +300,7 @@ su: switch user
 
 Diskler /dev dizinin altına mount olur.
 
+
 - **fdisk ( -l )**: sisteme bağlı diskler hakkında temel bilgi verir.
 - **df -h**: sistemde sadece mount edilmiş diskleri ve disklerin doluluk oranını gösterir.
 - **lsblk**: sisteme bağlı diskleri göstermek için farklı bir seçenek.
@@ -328,7 +332,9 @@ fdisk veya cfdisk ile formatlama:
 Mount edilmiş herhangi bir diskin bağlantısını koparmak için: 
 - `umount /mnt/sdx`
 
+
 *Diskin kalıcı olarak mount olması için FSTAB a kayıt edilmesi gerekmektedir.*
+
 
 
 ### Disk Genişletme & Küçültme
@@ -338,8 +344,10 @@ Disk küçültme risklidir, tavsiye edilmez. Veri kaybı yaşanabilir.
 cfdisk aracı ile genişletme:
 - Diskin bitiş noktasından sonra boş alan var ise disk genişleyebilir.
 - Disk genişledikten sonra dosya sistemi de genişlemelidir.
+
 	- **ext** için: `resize2fs /dev/sdx`
 	- **xfs** için: `xfs_growfs /dev/sdx`
+
 
 
 ### LVM
@@ -381,6 +389,7 @@ LVM yapısı ile birden fazla diski tek bir ortak havuzda toplayıp, bu havuzdan
 	- `resize2fs /dev/mapper/volumegroup10-lvm10`
 
 ## Linux'ta Firewall 
+
 
 Bir firewall, ağ trafiğini kontrol ederek yetkisiz erişimleri engelleyen bir güvenlik sistemidir. Linux'ta firewall genellikle kernel seviyesinde çalışır.
 
@@ -1063,5 +1072,4 @@ Primary ---------- Secondary
 **Netlogon**
 
 > Netlogon servisi, etki alanı denetleyicileri arasında oturum açma bilgilerini senkronize etmek, etki alanı politikalarını uygulamak ve güvenlik duvarı ayarlarını iletmek gibi önemli görevleri de yerine getirir.
-
 
