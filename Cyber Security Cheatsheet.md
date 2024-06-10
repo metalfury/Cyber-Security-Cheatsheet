@@ -866,3 +866,204 @@ Default Domain Policy'ye sağ tıklayarak ve "Edit" seçeneğini seçerek yönet
 - **Server:** IPsec kriptolu iletişim ister. Karşı taraf da kriptolu iletişim isterse iletişim kriptolu olur. Karşı taraf kriptosuz iletişim isterse iletişim kriptosuz olur. Varsayılan olarak kriptolu, gerekirse kriptosuz çalışır.
 
 
+# DNS
+
+Domain Name System (DNS) FQDN adlarını ip adreslerine çevirir.
+
+
+##### Çalışma Mimarisi
+
+>Bilgisayarınızın WEB browser Kısmına "www.google.com" yazdığınızda arka planda gerçekleşen işlemler nelerdir?
+
+- Bilgisayar öncelikli olarak bu ismi ip adresine çevirmek ister. Bunun için de ilk olarak kendi üzerinde bulunan host dosyasına(Windows/System32/drivers/etc) bakar.
+
+- Host dosyası boşsa kendi üzerinde tanımlı DNS sunucuya başvurarak FQDN adını ip adresine çevirmesini ister.
+
+- Başvurulan DNS server kendisine yapılan sorgulamanın cevabını biliyorsa direkt cevabı verir ve işlem tamamlanır. Cevabını bilmiyorsa default olarak üzerinde zaten tanımlı olan ROOT DNS sunucularına başvurarak cevabı arar.
+
+- ROOT DNS sunucular kendilerine yapılan sorgulamanın cevabını biliyorlarsa cevabı verirler ve işlem biter. Cevabı bilmiyorlarsa bilene yönlendirme yaparlar. Bu yönlendirme FQDN'in uzantısına göre yapılır.
+
+- Sorgulamayı ilk yapan DNS sunucu yönlendirildiği yere giderek cevabı arar ve istemcisine verir.
+
+
+==NOT:== Sisteme DNS kurulmasıyla birlikte 13 tane default DNS sunucu gelir. Bu sunucuların 12 tanesi Amerikada 1 tanesi ise Japonyadadır.  DNS üretici bağımsız bir sistemdir ve "**bind**" olarak ifade edilir.
+
+
+---
+##### Forward Lookup Zone
+
+* İsimleri ip'ye çevirir.
+
+* Bu şekilde bir zone oluşturup içine kayıt girmezsek, bu DNS sunucuyu gören hiçbir client bu    zone da tanımlı domaine erişemez.
+     - *örn: google.com zone u oluşturup kayıt girmezsek, kimse google'a erişemez, hata gelir.
+     - zone un kendi üzerinde tanımlı olduğunu düşündüğü için root DNS lere gidip sormaz direk hata döndürür.
+ 
+-   Bir zone altında belli bir bilgisayarı işaret eden kayıtlara da host kaydı denir.
+
+
+
+**Dynamic DNS Kaydı
+
+>DDNS, bir dinamik IP adresine sahip cihazlara erişmek için IP adresi değişikliklerini yönetmek için kullanılır. Bir DDNS hizmeti kullanarak, bir kullanıcı belirli bir alan adını(örneğin,"kullanıcı.ddns.net") ve bu alan adının değişen IP adresini ilişkilendirir.
+
+>Böylece, her IP adresi değiştiğinde, kullanıcı sadece DDNS sağlayıcısına yeni IP adresini bildirir ve bu yeni IP adresi otomatik olarak belirtilen alan adı ile ilişkilendirilir.
+
+>Bu, özellikle uzaktan erişim, web sunucuları veya IP kameralar gibi durumlarda kullanışlıdır. Kullanıcılar, değişen IP adresleri nedeniyle erişim sorunları yaşamadan bu cihazlara sabit bir alan adı üzerinden erişebilirler.
+
+
+**CName Nedir ?**
+
+>CName kaydı var olan bir host kaydına diğer kayıtları yönlendirmenizi sağlar. Bu şekilde de tek bir host kaydını değiştirerek ona yönlendirilmiş tüm host kayıtlarını değiştirebileceğimiz için sonrasında yaşanabilecek ip değişiklikleri için önden yapacağınız bu işlem işleri büyük ölçüde kolaylaştırır.
+
+
+**MX Kaydı**
+
+>Mail sunucuyu işaret eden kayıttır.
+
+--- 
+
+
+
+##### Reverse Lookup Zone
+
+* Ipleri isime çeviren zonedur.
+
+* Mail sunucularda spamı anlamak için kullanılan en klasik yöntemdir.
+
+* Reverse kaydını ISP'ler oluşturur.
+    - *Reverse Lookup Zone kaydının altında PTR (pointer) kayıtları oluşturulur.
+    - *Bu kayıt ip adresleriyle oluşturulur.
+
+
+
+--- 
+
+
+##### Forwarder
+
+ - Bir DNS e bilmediği isimleri sorgulaması için başka DNS i göstermeye Forwarder denir. 
+ 
+ - Forwarder girdiğimizde DNS servisi root DNS lere gitmez, Forwarder ın yönlendirdiği yere gider.
+ 
+ - Kurumsal mimarilerde (kamu kurumları vs.) DNS leri root a değil forwarder ile Türk telekom DNS leri gibi DNS lere yönlendirip oradan cevap alırız.
+
+
+
+**Conditional Forwarder**
+
+- Domain bazlı olarak bilmediklerini başkasına sor.  
+
+- Örneğin google.com ile ilgili bir sorgulama gelirse git şu DNS e sor gibi.  
+
+- Şartlı yönlendiricidir.  
+
+- Belirli DNS sorgularının belirli bir alan adı için başka bir sunucuya gönderilmesini sağlayan bir yapılandırmadır.
+
+
+---
+
+
+
+##### Primary Zone
+
+>Zone veri tabanının hem okunabilir hem yazılabilir kopyasını tutar. Hem kayıt oluşturabiliriz, hem de DNS in sorgulamalarına cevap verebileceği zone tipidir.
+
+##### Secondary Zone 
+
+>Sadece okunabilir kayıt tutulur, içine kayıt giremeyiz. İlk kayıt için uygun değildir. Master(primary) a ihtiyacı vardır.
+
+
+
+Primary                                  Secondary
+|-DNS1-|         ---------->       |-DNS2-|
+
+
+- *DNS 2 cevapları DNS 1'den alır ve o şekilde döndürür.
+- *DNS 1'de değişiklik olursa DNS 2'de de uygulanır.*
+- *Değişiklikler DNS 2'ye **serial numbera** göre gider.
+
+
+**Serial Number** 
+
+>Secondary zone a veri transferi yaparken değişiklik olup olmadığını gösteren parametredir. Serial number büyüdüğünde secondary zone değişiklik olduğunu anlar ve değişikliği kendine çeker.
+
+
+
+
+**SOA (Start Of Authority)**
+
+>Secondary zone ile ilgili ayarların yapıldığı,  primary den secondary e veri transferi yapılırken değişiklik olup olmadığını gösteren,  ne kadar zamanda bir kayıt yapılacağını gösteren, expires(süresi dolma) ve TTL ömrünü tutan kayıt tipleridir.
+>
+  ==NOT:== Time To Live (TTL) = Cache'de kalma ömrü.
+
+
+
+ >**Disable Recursion :** DNS sadece kendi üzerinde bulunan zone lar için cevap vercektir ve forwarding yapmayacaktır.
+ >
+   ==NOT:== Linuxa bir DNS(bind) kurarsak default olarak recursion kapalı olarak gelir.
+
+
+>**Round Rubin :** Enable durumda ise ve aynı fqdn farklı ip leri gösteriyorsa aralarında döndürerek yanıt verir.
+
+
+> DNS cache'i temizlemek için `ipconfig /flushdns` komutu kullanılır.
+
+
+---
+
+
+##### Active Directory Integrated Zone
+
+- DNS kayıtlarının active directory veri tabanında tutulmasıdır. 
+
+- DNS ve Active Directory yönetiminin tek bir platformda merkezi olarak yapılabilmesidir. Bu, yönetim süreçlerini basitleştirir ve tutarlılığı artırır. Ancak, bu avantajları elde etmek için DNS sunucularının Active Directory domain controller'ı olması gerekir. 
+
+- Bu şekilde secondary zone a ihtiyaç duyulmaz. DC ler arasında bu kayıtlar replike edilir.
+
+
+
+**Secure - None Secure Dynamic Updateler**
+
+-  **Secure Only :** Domaine dahil olan makineler kendi kayıtlarını (updateleri) otomatik olarak zone  altına düşebilirler. 
+    - *Bir makinenin kaydını otomatik olarak düşmesini istiyorsak : `ipconfig /registerdns`
+
+-  **None Secure And Secure :** AD ye dahil olsun ya da olmasın her makine DNS kaydını zone altına düşebilir.
+
+-  **None :** Hiç kimse kaydını düşemez.
+
+
+
+==NOT:== Active Directory ismi için oluşturulmuş zone lar (academy.local gibi) secure dynamic update lere açık olmak zorundadır. Yoksa AD düzgün çalışmaz çünkü istemciler kayıtlarını düşemezler.
+
+
+
+**AD Zone'u SRV Kayıtları** 
+
+- Zone altında bulunan kayıtlardır. 
+- AD kurulduğu andan itibaren DC tarafından otomatik olarak oluşturulan kayıtlardır. 
+- AD nin sağlıklı olması için srv kayıtlarının sağlıklı olması gerekir.
+
+
+**NSLOOKUP**
+
+- DNS sunucuyu direk olarak sorgulamamızı sağlayan araç. cmd'de `nslookup` komutu yazdığımızda sorgularız. 
+- Server 8.8.8.8 yazdığımızda google ın DNS ini sorgularız. 
+- Help yazdığımızda komutların açıklamalarını görürüz. 
+- Gerçek hayatta DNS te sorun olup olmadığını anlamak için de kullanırız.
+
+
+**Cache**
+
+- DNS üzerinde olmayan kayıtları forwardera ya da root DNS lere sorar. 
+- Bu işlemi yaptıktan sonra da bunu isim cachesine yazar. 
+- Bir daha sorgulama geldiğinde cachesinden cevap verir. 
+- Clear cache dediğimizde önbelleği temizler.
+
+==NOT:== AD zone u ya da server location kayıtlarını silersek, zone u yeniden oluşturmamız gerekir.
+
+
+**Netlogon**
+
+>Netlogon servisi, etki alanı denetleyicileri arasında oturum açma bilgilerini senkronize etmek, etki alanı politikalarını uygulamak ve güvenlik duvarı ayarlarını iletmek gibi önemli görevleri de yerine getirir.
+
+
