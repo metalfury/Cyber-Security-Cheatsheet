@@ -886,7 +886,7 @@ Domain Name System (DNS) FQDN adlarını ip adreslerine çevirir.
 - Sorgulamayı ilk yapan DNS sunucu yönlendirildiği yere giderek cevabı arar ve istemcisine verir.
 
 
-==NOT:== Sisteme DNS kurulmasıyla birlikte 13 tane default DNS sunucu gelir. Bu sunucuların 12 tanesi Amerikada 1 tanesi ise Japonyadadır.  DNS üretici bağımsız bir sistemdir ve "**bind**" olarak ifade edilir.
+> NOT: Sisteme DNS kurulmasıyla birlikte 13 tane default DNS sunucu gelir. Bu sunucuların 12 tanesi Amerikada 1 tanesi ise Japonyadadır.  DNS üretici bağımsız bir sistemdir ve "**bind**" olarak ifade edilir.
 
 
 ---
@@ -966,16 +966,16 @@ Domain Name System (DNS) FQDN adlarını ip adreslerine çevirir.
 
 ##### Primary Zone
 
->Zone veri tabanının hem okunabilir hem yazılabilir kopyasını tutar. Hem kayıt oluşturabiliriz, hem de DNS in sorgulamalarına cevap verebileceği zone tipidir.
+> Zone veri tabanının hem okunabilir hem yazılabilir kopyasını tutar. Hem kayıt oluşturabiliriz, hem de DNS in sorgulamalarına cevap verebileceği zone tipidir.
 
 ##### Secondary Zone 
 
->Sadece okunabilir kayıt tutulur, içine kayıt giremeyiz. İlk kayıt için uygun değildir. Master(primary) a ihtiyacı vardır.
+> Sadece okunabilir kayıt tutulur, içine kayıt giremeyiz. İlk kayıt için uygun değildir. Master(primary) a ihtiyacı vardır.
 
 
 
-Primary                                  Secondary
-|-DNS1-|         ---------->       |-DNS2-|
+Primary ---------- Secondary
+> |-DNS1-|         ---------->       |-DNS2-|
 
 
 - *DNS 2 cevapları DNS 1'den alır ve o şekilde döndürür.
@@ -985,25 +985,23 @@ Primary                                  Secondary
 
 **Serial Number** 
 
->Secondary zone a veri transferi yaparken değişiklik olup olmadığını gösteren parametredir. Serial number büyüdüğünde secondary zone değişiklik olduğunu anlar ve değişikliği kendine çeker.
+> Secondary zone a veri transferi yaparken değişiklik olup olmadığını gösteren parametredir. Serial number büyüdüğünde secondary zone değişiklik olduğunu anlar ve değişikliği kendine çeker.
 
 
 
 
 **SOA (Start Of Authority)**
 
->Secondary zone ile ilgili ayarların yapıldığı,  primary den secondary e veri transferi yapılırken değişiklik olup olmadığını gösteren,  ne kadar zamanda bir kayıt yapılacağını gösteren, expires(süresi dolma) ve TTL ömrünü tutan kayıt tipleridir.
->
-  ==NOT:== Time To Live (TTL) = Cache'de kalma ömrü.
+> Secondary zone ile ilgili ayarların yapıldığı,  primary den secondary e veri transferi yapılırken değişiklik olup olmadığını gösteren,  ne kadar zamanda bir kayıt yapılacağını gösteren, expires(süresi dolma) ve TTL ömrünü tutan kayıt tipleridir.
+> NOT: Time To Live (TTL) = Cache'de kalma ömrü.
 
 
 
- >**Disable Recursion :** DNS sadece kendi üzerinde bulunan zone lar için cevap vercektir ve forwarding yapmayacaktır.
- >
-   ==NOT:== Linuxa bir DNS(bind) kurarsak default olarak recursion kapalı olarak gelir.
+> **Disable Recursion :** DNS sadece kendi üzerinde bulunan zone lar için cevap vercektir ve forwarding yapmayacaktır.
+> NOT: Linuxa bir DNS(bind) kurarsak default olarak recursion kapalı olarak gelir.
 
 
->**Round Rubin :** Enable durumda ise ve aynı fqdn farklı ip leri gösteriyorsa aralarında döndürerek yanıt verir.
+> **Round Rubin :** Enable durumda ise ve aynı fqdn farklı ip leri gösteriyorsa aralarında döndürerek yanıt verir.
 
 
 > DNS cache'i temizlemek için `ipconfig /flushdns` komutu kullanılır.
@@ -1033,7 +1031,7 @@ Primary                                  Secondary
 
 
 
-==NOT:== Active Directory ismi için oluşturulmuş zone lar (academy.local gibi) secure dynamic update lere açık olmak zorundadır. Yoksa AD düzgün çalışmaz çünkü istemciler kayıtlarını düşemezler.
+> NOT: Active Directory ismi için oluşturulmuş zone lar (academy.local gibi) secure dynamic update lere açık olmak zorundadır. Yoksa AD düzgün çalışmaz çünkü istemciler kayıtlarını düşemezler.
 
 
 
@@ -1059,11 +1057,11 @@ Primary                                  Secondary
 - Bir daha sorgulama geldiğinde cachesinden cevap verir. 
 - Clear cache dediğimizde önbelleği temizler.
 
-==NOT:== AD zone u ya da server location kayıtlarını silersek, zone u yeniden oluşturmamız gerekir.
+> NOT: AD zone u ya da server location kayıtlarını silersek, zone u yeniden oluşturmamız gerekir.
 
 
 **Netlogon**
 
->Netlogon servisi, etki alanı denetleyicileri arasında oturum açma bilgilerini senkronize etmek, etki alanı politikalarını uygulamak ve güvenlik duvarı ayarlarını iletmek gibi önemli görevleri de yerine getirir.
+> Netlogon servisi, etki alanı denetleyicileri arasında oturum açma bilgilerini senkronize etmek, etki alanı politikalarını uygulamak ve güvenlik duvarı ayarlarını iletmek gibi önemli görevleri de yerine getirir.
 
 
